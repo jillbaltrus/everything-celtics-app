@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { globalStyles } from "./../styles/global";
+import { fetchCelticsTeam } from "../api/nbaService.api";
 
 export default function Home() {
   const [doneLoading, setDoneLoading] = useState(false);

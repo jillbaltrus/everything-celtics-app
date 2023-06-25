@@ -1,24 +1,15 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
+import { globalStyles } from "../../styles/global";
 
-export default function PlayerName({ player, pressHandler }) {
+export default function PlayerName({ player, pressHandler, sortedSeasons }) {
+  const jerseyNumber = player.leagues?.standard?.jersey;
   return (
-    <TouchableOpacity onPress={() => pressHandler(player.id)}>
-      <Text style={styles.player}>
-        {player.firstname} {player.lastname} #
-        {player.leagues.standard.jersey || 0}
+    <TouchableOpacity onPress={() => pressHandler(player, sortedSeasons)}>
+      <Text style={globalStyles.curvedBorderOutline}>
+        {player.firstname} {player.lastname}
+        {jerseyNumber && `#${jerseyNumber}`}
       </Text>
     </TouchableOpacity>
   );
 }
-
-const styles = StyleSheet.create({
-  player: {
-    padding: 16,
-    marginTop: 16,
-    borderColor: "#bbb",
-    borderWidth: 1,
-    borderStyle: "dashed",
-    borderRadius: 10,
-  },
-});

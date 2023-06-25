@@ -3,40 +3,22 @@ import { StyleSheet, TextInput, View } from "react-native";
 import { SelectList } from "react-native-dropdown-select-list";
 import { globalStyles } from "../../styles/global";
 import SearchButton from "../atoms/SearchButton";
+import SeasonSelector from "../atoms/SeasonSelector";
 
 // PLACEHOLDER CONSTANTS:
-const seasonDropdownPlaceholder = "Select a season";
-const searchBarPlaceholder = "last name (optional)";
 const searchButtonText = "Search";
-const dropdownValueFieldName = "value";
+const searchBarPlaceholder = "Last name (optional)";
+
 
 export default function Search({ searchHandler, seasons }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedSeason, setSelectedSeason] = useState("");
-  const [defaultSeasonOption, setDefaultSeasonOption] = useState();
 
-  useEffect(() => {
-    if (seasons.length > 0) {
-      // index 0 always has latest season
-      setDefaultSeasonOption(seasons[0]);
-      setSelectedSeason(seasons[0].value);
-    }
-  }, [seasons]);
+  const selectHandler = (val) => setSelectedSeason(val);
 
   return (
     <View>
-      <View style={globalStyles.center}>
-        <SelectList
-          setSelected={(val) => setSelectedSeason(val)}
-          data={seasons}
-          save={dropdownValueFieldName}
-          search={false}
-          placeholder={seasonDropdownPlaceholder}
-          defaultOption={defaultSeasonOption}
-          boxStyles={styles.dropdownBox}
-          dropdownStyles={styles.dropdownOptions}
-        ></SelectList>
-      </View>
+      <SeasonSelector sortedSeasons={seasons} selectHandler={selectHandler}/>
       <TextInput
         style={styles.input}
         placeholder={searchBarPlaceholder}

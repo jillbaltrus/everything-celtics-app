@@ -27,13 +27,13 @@ export default function Players({ navigation }) {
   useEffect(() => {
     const loadSeasons = async () => {
       try {
-        // const data = await fetchSeasons();
-        // const sortedSeasonObjects = data.map(d => ({ key: d, value: d})).sort((a, b) => b.value - a.value);
-        const sortedSeasonObjects = [
-          { key: 2022, value: 2022 },
-          { key: 2021, value: 2021 },
-          { key: 2020, value: 2020 },
-        ];
+        const data = await fetchSeasons();
+        const sortedSeasonObjects = data.map(d => ({ key: d, value: d})).sort((a, b) => b.value - a.value);
+        // const sortedSeasonObjects = [
+        //   { key: 2022, value: 2022 },
+        //   { key: 2021, value: 2021 },
+        //   { key: 2020, value: 2020 },
+        // ];
         setSeasons(sortedSeasonObjects);
       } catch (error) {
         console.error(error);
@@ -57,9 +57,9 @@ export default function Players({ navigation }) {
   // TO BE REINTRODUCED - commenting out during development so I don't have to pay per API call :)
   const loadPlayers = async (season) => {
     try {
-      // const data = await fetchCelticsPlayersBySeason(season);
-      // setPlayers(data.sort(player => parseInt(player.leagues.standard.jersey)));
-      setPlayers([]);
+      const data = await fetchCelticsPlayersBySeason(season);
+      setPlayers(data.sort(player => parseInt(player.leagues?.standard?.jersey)));
+      // setPlayers([]);
     } catch (error) {
       console.error(error);
     } finally {
@@ -70,19 +70,20 @@ export default function Players({ navigation }) {
   // TO BE REINTRODUCED - commenting out during development so I don't have to pay per API call :)
   const searchPlayers = async (searchTerm, season) => {
     try {
-      // const data = await fetchPlayersBySeasonAndSearch(season, searchTerm);
-      const data = [];
+      const data = await fetchPlayersBySeasonAndSearch(season, searchTerm);
+      // const data = [];
       setPlayers(
-        data.sort((player) => parseInt(player.leagues.standard.jersey))
+        data.sort((player) => parseInt(player.leagues?.standard?.jersey))
       );
     } catch (error) {
       console.error(error);
     }
   };
 
-  const playerPressHandler = (id) => {
+  const playerPressHandler = (player, sortedSeasons) => {
     navigation.navigate(playerDetailsRouteName, {
-      playerId: id,
+      player: player,
+      sortedSeasons: sortedSeasons,
     });
   };
 
@@ -109,7 +110,7 @@ export default function Players({ navigation }) {
               keyExtractor={(item) => item.id}
               data={players}
               renderItem={({ item }) => (
-                <PlayerName player={item} pressHandler={playerPressHandler} />
+                <PlayerName player={item} pressHandler={playerPressHandler} sortedSeasons={seasons} />
               )}
             ></FlatList>
           )}

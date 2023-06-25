@@ -14,15 +14,46 @@ export const globalStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  curvedBorderOutline: {
+    padding: 16,
+    marginTop: 16,
+    borderColor: "#bbb",
+    borderWidth: 1,
+    borderRadius: 10,
+  },
+  bottomBorder: {
+    paddingBottom: 12,
+    borderColor: "#bbb",
+    borderBottomWidth: 1,
+  },
   list: {
     marginTop: 15,
     flex: 1,
   },
+  titleText: {
+    marginBottom: 12,
+    marginStart: 10,
+    lineHeight: 20,
+    // textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
   paragraph: {
     marginBottom: 12,
-    lineHeight: 20,
-    textAlign: "center",
-    fontSize: 14,
+    lineHeight: 25,
+    // textAlign: "center",
+    fontSize: 16,
+  },
+  paragraphBold: {
+    marginBottom: 12,
+    lineHeight: 25,
+    // textAlign: "center",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  leftTextContainer: {
+    textAlign: "left",
+    marginStart: 20,
   },
   drawerNavigationOptions: {
     headerStyle: {
