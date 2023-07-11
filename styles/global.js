@@ -30,24 +30,24 @@ export const globalStyles = StyleSheet.create({
     marginTop: 15,
     flex: 1,
   },
+  marginAbove: {
+    marginTop: 15,
+  },
   titleText: {
     marginBottom: 12,
     marginStart: 10,
     lineHeight: 20,
-    // textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
   },
   paragraph: {
     marginBottom: 12,
     lineHeight: 25,
-    // textAlign: "center",
     fontSize: 16,
   },
   paragraphBold: {
     marginBottom: 12,
     lineHeight: 25,
-    // textAlign: "center",
     fontSize: 16,
     fontWeight: "bold",
   },

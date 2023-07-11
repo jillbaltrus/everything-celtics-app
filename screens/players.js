@@ -7,7 +7,6 @@ import {
   fetchCelticsPlayersBySeason,
   fetchPlayersBySeasonAndSearch,
   fetchSeasons,
-  fetchPlayersBySearch,
 } from "../api/nbaService.api";
 
 // constants
@@ -22,18 +21,12 @@ export default function Players({ navigation }) {
   const [players, setPlayers] = useState([]);
   const [seasons, setSeasons] = useState([]);
 
-  // TO BE REINTRODUCED - commenting out during development so I don't have to pay per API call :)
   // load seasons
   useEffect(() => {
     const loadSeasons = async () => {
       try {
         const data = await fetchSeasons();
         const sortedSeasonObjects = data.map(d => ({ key: d, value: d})).sort((a, b) => b.value - a.value);
-        // const sortedSeasonObjects = [
-        //   { key: 2022, value: 2022 },
-        //   { key: 2021, value: 2021 },
-        //   { key: 2020, value: 2020 },
-        // ];
         setSeasons(sortedSeasonObjects);
       } catch (error) {
         console.error(error);
@@ -45,8 +38,7 @@ export default function Players({ navigation }) {
     loadSeasons();
   }, []);
 
-  // TO BE REINTRODUCED - commenting out during development so I don't have to pay per API call :)
-  // load players, triggered when seasons are set.
+  // load players, triggered when seasons are set (when page is first loaded)
   useEffect(() => {
     if (seasons.length > 0) {
       // index 0 always has latest season
@@ -54,12 +46,10 @@ export default function Players({ navigation }) {
     }
   }, [seasons]);
 
-  // TO BE REINTRODUCED - commenting out during development so I don't have to pay per API call :)
   const loadPlayers = async (season) => {
     try {
       const data = await fetchCelticsPlayersBySeason(season);
-      setPlayers(data.sort(player => parseInt(player.leagues?.standard?.jersey)));
-      // setPlayers([]);
+      setPlayers(sortAndFilterPlayers(data));
     } catch (error) {
       console.error(error);
     } finally {
@@ -67,18 +57,30 @@ export default function Players({ navigation }) {
     }
   };
 
-  // TO BE REINTRODUCED - commenting out during development so I don't have to pay per API call :)
   const searchPlayers = async (searchTerm, season) => {
     try {
-      const data = await fetchPlayersBySeasonAndSearch(season, searchTerm);
-      // const data = [];
-      setPlayers(
-        data.sort((player) => parseInt(player.leagues?.standard?.jersey))
-      );
+      setPlayersLoaded(false);
+      let data;
+      if (searchTerm.trim().length > 0) {
+        data = await fetchPlayersBySeasonAndSearch(season, searchTerm);
+      } else {
+        data = await fetchCelticsPlayersBySeason(season);
+      }
+      setPlayers(sortAndFilterPlayers(data));
+      setPlayersLoaded(true);
     } catch (error) {
       console.error(error);
     }
   };
+
+  const sortAndFilterPlayers = (playerData) => {
+    // only include players from standard league
+    const filteredPlayerData = playerData.filter(p => Object.keys(p.leagues).includes('standard'));
+    // sort by last name
+    const sortedFilteredPlayerData = filteredPlayerData.sort((p1, p2) =>
+    p1.lastname.localeCompare(p2.lastname));
+    return sortedFilteredPlayerData;
+  }
 
   const playerPressHandler = (player, sortedSeasons) => {
     navigation.navigate(playerDetailsRouteName, {
@@ -95,7 +97,7 @@ export default function Players({ navigation }) {
     }
   };
 
-  if (!seasonsLoaded || !playersLoaded) {
+  if (!seasonsLoaded) {
     return; // todo: loading icon
   }
 
@@ -114,7 +116,7 @@ export default function Players({ navigation }) {
               )}
             ></FlatList>
           )}
-          {(!players || players.length == 0) && (
+          {(!players || players.length == 0) && playersLoaded && (
             <Text style={globalStyles.paragraph}>{noPlayersMsg}</Text>
           )}
         </View>

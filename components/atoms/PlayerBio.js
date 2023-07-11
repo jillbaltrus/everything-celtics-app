@@ -34,7 +34,7 @@ export default function PlayerBio({ player }) {
     },
     {
       title: "First NBA season",
-      body: `${nbaStartYear}`,
+      body: `${nbaStartYear == 0 ? null : nbaStartYear}`,
     },
     {
       title: "NBA Status",
@@ -50,7 +50,7 @@ export default function PlayerBio({ player }) {
       <View style={globalStyles.bottomBorder}>
         <FlatList
           keyExtractor={(item) => item.title}
-          data={bioDetails}
+          data={bioDetails.filter(detail => !detail.body.includes('null'))}
           renderItem={({ item }) => <BioDetail detail={item} />}
         ></FlatList>
       </View>

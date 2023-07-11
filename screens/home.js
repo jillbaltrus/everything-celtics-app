@@ -8,19 +8,19 @@ export default function Home() {
   const [logo, setLogo] = useState(null);
 
   // TO BE REINTRODUCED - commenting out during development so I don't have to pay per API call :)
-  // useEffect(() => {
-  //     const fetchCelticsData = async () => {
-  //         try {
-  //             const data = await fetchCelticsTeam();
-  //             setLogo(data[0].logo);
-  //         } catch (error) {
-  //           console.error(error);
-  //         } finally {
-  //             setDoneLoading(true);
-  //         }
-  //       };
-  //       fetchCelticsData();
-  //   }, []);
+  useEffect(() => {
+      const fetchCelticsData = async () => {
+          try {
+              const data = await fetchCelticsTeam();
+              setLogo(data[0].logo);
+          } catch (error) {
+            console.error(error);
+          } finally {
+              setDoneLoading(true);
+          }
+        };
+        fetchCelticsData();
+    }, []);
 
   return (
     <View style={globalStyles.container}>

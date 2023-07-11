@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { SelectList } from "react-native-dropdown-select-list";
+import { View, Text } from "react-native";
 import { globalStyles } from "../../styles/global";
 import SeasonSelector from "../atoms/SeasonSelector";
 import SearchButton from "../atoms/SearchButton";
@@ -9,12 +8,10 @@ import { fetchPlayersStatsByPlayerAndSeason } from "../../api/nbaService.api";
 // PLACEHOLDER CONSTANTS:
 const searchButtonTitle = "Search";
 
-export default function PlayerStats({ playerId, sortedSeasons }) {
+export default function PlayerStats({ player, sortedSeasons }) {
   const [selectedSeason, setSelectedSeason] = useState("");
   const [stats, setStats] = useState();
 
-  // TO BE REINTRODUCED - commenting out during development so I don't have to pay per API call :)
-  // load players, triggered when seasons are set.
   useEffect(() => {
     getStatsBySeason(selectedSeason);
   }, [selectedSeason]);
@@ -23,8 +20,11 @@ export default function PlayerStats({ playerId, sortedSeasons }) {
 
   const getStatsBySeason = async (season) => {
     try {
-      if (season && season.length > 0) {
-        const data = await fetchPlayersStatsByPlayerAndSeason(playerId, season);
+      if (selectedSeason && selectedSeason.length > 0) {
+        const data = await fetchPlayersStatsByPlayerAndSeason(
+          player.id,
+          selectedSeason
+        );
         setStats(data);
       }
     } catch (error) {
@@ -41,13 +41,19 @@ export default function PlayerStats({ playerId, sortedSeasons }) {
   };
 
   return (
-    <View style={globalStyles.center}>
-      <SeasonSelector
-        selectHandler={selectHandler}
-        sortedSeasons={sortedSeasons}
-      />
-      <SearchButton onPress={searchHandler} title={searchButtonTitle} />
-      <Text>Stats will go here.</Text>
+    <View style={globalStyles.marginAbove}>
+      <Text style={globalStyles.titleText}>Performance</Text>
+      <Text style={[globalStyles.paragraph, globalStyles.leftTextContainer]}>
+        Explore {player.firstname} {player.lastname}'s statistics by season
+      </Text>
+      <View style={globalStyles.center}>
+        <SeasonSelector
+          selectHandler={selectHandler}
+          sortedSeasons={sortedSeasons}
+        />
+        <SearchButton onPress={searchHandler} title={searchButtonTitle} />
+        <Text>Stats for season {selectedSeason}.</Text>
+      </View>
     </View>
   );
 }

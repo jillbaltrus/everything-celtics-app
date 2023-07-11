@@ -8,7 +8,7 @@ export default function PlayerName({ player, pressHandler, sortedSeasons }) {
     <TouchableOpacity onPress={() => pressHandler(player, sortedSeasons)}>
       <Text style={globalStyles.curvedBorderOutline}>
         {player.firstname} {player.lastname}
-        {jerseyNumber && `#${jerseyNumber}`}
+        {jerseyNumber && ` #${jerseyNumber}`}
       </Text>
     </TouchableOpacity>
   );
